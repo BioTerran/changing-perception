@@ -1,0 +1,115 @@
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1650px;
+    }
+}
+
+#header-wrap {
+    text-align: center;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    min-width: 60px;
+    min-height: 60px;
+    padding: 2px;
+    background: white;
+    stroke: gray;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.tooltip h2 {
+     margin: auto;
+     font: 16px sans-serif;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tooltip h3 {
+    margin: auto;
+    font: 14px sans-serif;
+    font-weight: bold;
+}
+
+#currentTimeRange {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+#chart-options-row {
+    margin-top: 70px;
+}
+
+#second-container {
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 20px;
+}
+
+#timeSlider {
+    margin: auto;
+    max-width: 900px;
+}
+
+img.card-img-top {
+    margin-right: auto;
+    margin-left: auto;
+    width: 64px;
+}
+
+div.card-body {
+    text-align: center;
+}
+
+div.card {
+    width: 10rem;
+}
+
+div.card:hover {
+    background: lightgray;
+}
+
+.question {
+    width: 16px;
+}
+
+.footer {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.legend-question {
+    margin-left: 20px;
+    width: 16px;
+    opacity: 1.0;
+}
+
+.legend-question:hover {
+    opacity: 0.5;
+}
+
+#info-row {
+    margin-top: 20px;
+}
+
+.info {
+    max-width: 430px;
+}
+
+.highlightedLabel {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.highlightedCard {
+    background: lightgray;
+}
+
+.legend-color {
+    margin-left: 20px;
+    background: black;
+    width: 20px;
+    height: 20px;
+}

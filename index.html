@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exploring America's Meat History</title>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/nouislider.css"/>
+    <link rel="stylesheet" href="css/shepherd.css"/>
+</head>
+<body id ='body'>
+<div class="container">
+    <div class="row">
+        <div class="col" id="header-col">
+            <div id="header-wrap">
+                <header id="header">
+                    <h1>Exploring America's Meat History</h1>
+                    <div>An Exploration Tool to Make a More Informed Consumer</div>
+                </header>
+            </div>
+        </div>
+        <div class="col">
+            The United States Department of Agriculture has provided data related to land animals in America used for meat. This tool
+            specifically explores the slaughter counts of animals in the United States and provides users with with tools
+            to better explore the data.
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" id="second-container">
+    <div class="row" id="second-row">
+        <div class="col" id="graph-div">
+            <svg width="1000" height="600" id="graph-svg"></svg>
+            <div id="timeSlider"></div>
+        </div>
+        <div class="col" id="stats-col">
+            <div class="row">
+                <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
+                <div class="card" id="cowCard" data-toggle="modal" data-target="#cowDescriptionModal">
+                    <img class="card-img-top" src="icons/cow.svg" alt="Cow">
+                    <div class="card-body">
+                        <h5>Cows</h5>
+                    </div>
+                </div>
+                <div class="card" id="chickenCard" data-toggle="modal" data-target="#chickenDescriptionModal">
+                    <img class="card-img-top" src="icons/chicken.svg" alt="Chicken">
+                    <div class="card-body">
+                        <h5>Chickens</h5>
+                    </div>
+                </div>
+                <div class="card" id="pigCard" data-toggle="modal" data-target="#pigDescriptionModal">
+                    <img class="card-img-top" src="icons/pig.svg" alt="Pig">
+                    <div class="card-body">
+                        <h5>Pigs</h5>
+                    </div>
+                </div>
+                <div class="card" id="turkeyCard" data-toggle="modal" data-target="#turkeyDescriptionModal">
+                    <img class="card-img-top" src="icons/turkey.svg" alt="Turkey" >
+                    <div class="card-body">
+                        <h5>Turkeys</h5>
+                    </div>
+                </div>
+                <div class="card" id="sheepCard" data-toggle="modal" data-target="#sheepDescriptionModal">
+                    <img class="card-img-top" src="icons/sheep.svg" alt="Sheep">
+                    <div class="card-body">
+                        <h5>Sheep</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="info-row">
+                <div class="col info" style="text-align: center; max-width: 350px;" id="infoCounts">
+                    <div class="border row">
+                        <div class="col">
+                            <h5>Total Slaughter Counts</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="border col">
+                            <h6 id="cowLabel">Cows</h6>
+                        </div>
+                        <div class="border col">
+                            <h6 id="cowSlaughterCount"></h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="chickenLabel">Chickens</h6></div>
+                        <div class="border col"><h6 id="chickenSlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="pigLabel">Pigs</h6></div>
+                        <div class="border col"><h6 id="pigSlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="turkeyLabel">Turkeys</h6></div>
+                        <div class="border col"><h6 id="turkeySlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="sheepLabel">Sheep</h6></div>
+                        <div class="border col"><h6 id="sheepSlaughterCount"></h6></div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px">
+                        <div class="border col"><h5>Average Monthly Slaughter Counts</h5></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="cowMonthlyLabel">Cows</h6></div>
+                        <div class="border col"><h6 id="cowMonthlySlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="chickenMonthlyLabel">Chickens</h6></div>
+                        <div class="border col"><h6 id="chickenMonthlySlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="pigMonthlyLabel">Pigs</h6></div>
+                        <div class="border col"><h6 id="pigMonthlySlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="turkeyMonthlyLabel">Turkeys</h6></div>
+                        <div class="border col"><h6 id="turkeyMonthlySlaughterCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6 id="sheepMonthlyLabel">Sheep</h6></div>
+                        <div class="border col"><h6 id="sheepMonthlySlaughterCount"></h6></div>
+                    </div>
+                </div>
+                <div class="col info" style="text-align: center; margin-left: 30px" id="refAndCountPerTimePeriod">
+                    <div class="row">
+                        <div class="border col"><h5>Reference Population Counts</h5></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Average Class</h6></div>
+                        <div class="border col"><h6>30</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Salt Lake City:&nbsp;</h6></div>
+                        <div class="border col"><h6>200,544</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Utah:&nbsp;</h6></div>
+                        <div class="border col"><h6>3,161,000</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>United States:&nbsp;</h6></div>
+                        <div class="border col"><h6>327,200,000</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>World:&nbsp;</h6></div>
+                        <div class="border col"><h6>7,747,343,189</h6></div>
+                    </div>
+
+                    <div class="row" style="margin-top: 20px">
+                        <div class="border col" style="padding: 0px"><h5>Slaughter Count Per Time Period</h5></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Second</h6></div>
+                        <div class="border col"><h6 id="secondCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Minute</h6></div>
+                        <div class="border col"><h6 id="minuteCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Hour</h6></div>
+                        <div class="border col"><h6 id="hourCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Day</h6></div>
+                        <div class="border col"><h6 id="dayCount"></h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="border col"><h6>Week</h6></div>
+                        <div class="border col"><h6 id="weekCount"></h6></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col">
+                    <div class="row" id="currentCountRow">
+                        <div class="col" style="text-align: center; max-width: 350px">
+                            <div class="row">
+                                <div class="border col">
+                                    <h6>Seconds</h6>
+                                </div>
+                                <div class="border col">
+                                    <h6 id="seconds">0</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="border col">
+                                    <h6>Animals Killed</h6>
+                                </div>
+                                <div class="border col">
+                                    <h6 id="totalAnimalKilledCount">0</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="third-row">
+        <div class="col">
+            <div class="row" id="chart-options-row">
+                <div class="col border-left border-top border-bottom">
+                    <div class="dropdown" style="padding-left: 10px">
+                        <div class="row">
+                            <h6>Chart Type</h6>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Chart Type
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" id="stackedAreaChartBtn" href="#">Stacked Area Chart</a>
+                                <a class="dropdown-item" id="streamgraphBtn" href="#">Streamgraph</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col border-top border-bottom">
+                    <h6>Data Selection</h6>
+                    <!-- https://getbootstrap.com/docs/4.0/components/forms/ -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="cowCheckbox" checked>
+                        <label class="form-check-label" for="cowCheckbox">
+                            Cows
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="chickenCheckbox" checked>
+                        <label class="form-check-label" for="chickenCheckbox">
+                            Chickens
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="pigCheckbox" checked>
+                        <label class="form-check-label" for="pigCheckbox">
+                            Pigs
+                        </label>
+                   </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="turkeyCheckbox" checked>
+                        <label class="form-check-label" for="turkeyCheckbox">
+                            Turkeys
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="sheepCheckbox" checked>
+                        <label class="form-check-label" for="sheepCheckbox">
+                            Sheep
+                        </label>
+                    </div>
+                </div>
+                <div class="col border-top border-bottom">
+                    <h6>Legend</h6>
+                    <div id="legend-div">Hello world</div>
+                </div>
+                <div class="col border-top border-bottom border-right">
+                    <div class="row">
+                        <div class="col">
+                            <h6>Walkthrough</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="btn btn-outline-primary" id="play-button" style="margin-top: 15px">Play</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid footer">
+    <div class="row">
+        <div class="col">
+            <h6>Dataset from the United States Department of Agriculture (<a href="https://www.ers.usda.gov/data-products/livestock-meat-domestic-data/">link</a>). US Population counts from <a href="https://www.google.com/publicdata/explore?ds=kf7tgg1uo9ude_&met_y=population&idim=country:US&hl=en&dl=en">link</a>.</h6>
+            <h6>Scrollbar made with <a href="https://refreshless.com/nouislider/">noUiSlider</a> (<a href="noUiSlider-LICENSE.md">license/copyright</a>). Intro and Walkthrough made with <a href="https://shepherdjs.dev/">ShepherdJS</a> (<a href="ShepherdJS-LICENSE.md">license/copyright</a>).</h6>
+            <h6>Made with <a href="https://d3js.org/">D3.js</a> and <a href="https://getbootstrap.com/">Bootstrap</a></h6>
+        </div>
+        <div class="col">
+            <div>Cow and Turkey icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+            <div>Chicken and Sheep icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+            <div>Pig icon made by <a href="https://www.flaticon.com/authors/photo3idea-studio" title="photo3idea_studio">photo3idea_studio</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal https://getbootstrap.com/docs/4.0/components/modal/ -->
+<div class="modal fade" id="animalDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="animalModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="animalModalTitle">Title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cowDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="cowModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cows</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <img src="images/cow.jpg" alt="Cow Image">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <a href="https://www.pexels.com/photo/agriculture-animal-cattle-close-up-458991/">link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chickenDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="chickenModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chickens</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <img src="images/chicken.jpg" alt="Chicken Image">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <a href="https://www.pexels.com/photo/four-assorted-color-roosters-1769279/">link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pigDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="pigModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pigs</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <img src="images/pig.jpg" alt="Pig Image">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <a href="https://www.pexels.com/photo/farm-farmer-pink-ears-110820/">link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="turkeyDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="turkeyModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Turkeys</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <img src="images/turkey.jpg" alt="Turkey Image">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <a href="https://www.pexels.com/photo/two-black-turkeys-1078781/">link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sheepDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="sheepModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sheep</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <img src="images/sheep.jpg" alt="Sheep Image">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" style="text-align: center">
+                                    <a href="https://www.pexels.com/photo/agriculture-animals-baby-blur-288621/">link</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="application/javascript" src="js/shepherd.min.js"></script>
+<script type="application/javascript" src="js/graph.js"></script>
+<script type="application/javascript" src="js/nouislider.js"></script>
+<script type="application/javascript" src="js/script.js"></script>
+</body>
+</html>
